@@ -16,7 +16,7 @@
           {{ todo.name }}
           <!-- Интерполяция это обертывание в двойные скобки для того что бы обратится к значению переменной  todo of todos 
           Но при этом нужно еще для тегов li v-for надо задать уникальный  ключ :key="todo.id"(V-bind или (:) - это привязка)
-          name используем потому что в let todos = ref есть идентификатор -->
+          name используем потому что в let todos = ref есть идентификатор/ -->
         </label>
         <button class="delete-btn" @click="deleteTodo(todo.id)">х</button>
         <!-- вызываем метод  @click, передаем этот идентификатор todo.id  в function deleteTodo (id)-->
