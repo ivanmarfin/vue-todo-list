@@ -2,7 +2,7 @@
   <div class="todo-list">
     <h2 class="title">Список дел</h2>
     <ul class="todos">
-      <li v-for="todo of todos" :key="todo.id">
+      <li v-for="todo of props.todos" :key="todo.id">
         <input :id="todo.id" type="checkbox" @change="markDone(todo.id)" />
         <label :for="todo.id" :class="{ '-done': todo.isDone }">
           {{ todo.name }}
@@ -55,41 +55,27 @@
 </style>
 
 <script setup>
-// это JS 
-//  setup позволяет описывать Composition API
-// Во вью 3 есть на выбор два способа написания скрипта 
-// Options API и Composition API 
-// 1- Options API - это описание JS компонента через обычный объект 
-// т.е. у нас будет объект компонента и мы будем у него какие то свойства описывать
-// 2- Composition API - представляет из себя не описание какого либо компонета,а просто пишем нужный нам  код 
 
-import {ref} from "vue";
+import {ref, defineProps, defineEmits} from "vue";
 
-let todos = ref([
-  { id: 1, name: 'Купить пиво', isDone: false },
-  { id: 2, name: 'Купить хлеб', isDone: false },
-  { id: 3, name: 'Пойти спать', isDone: false },
-]);
+const props = defineProps({
+  todos: Array
+})
+
+const emit = defineEmits(['onMark', 'onDelete', 'onAdd'])
 
 let todoName = ref('');
 
 function onClickAdd () {
-  todos.value.push({ id: Date.now(), name: todoName.value, isDone: false });
+  emit('onAdd', { id: Date.now(), name: todoName.value, isDone: false })
   todoName.value = '';
 }
 
 function deleteTodo (id) {
-  todos.value = todos.value.filter((todo) => todo.id !== id)
+  emit('onDelete', id)
 }
 
 function markDone (id) {
-  const todo = todos.value.find((todo) => todo.id === id)
-  if (todo) {
-    todo.isDone = !todo.isDone;
-  }
+  emit('onMark', id)
 }
 </script>
-
-<style scoped>
-
-</style>
