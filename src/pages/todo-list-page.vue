@@ -31,6 +31,7 @@ function markDone (id) {
     todo.isDone = !todo.isDone;
   }
 }
+
 </script>
 
 <style scoped>

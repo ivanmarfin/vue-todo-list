@@ -2,20 +2,17 @@
   <div class="todo-list">
     <h2 class="title">Список дел</h2>
     <ul class="todos">
-      <li v-for="todo of props.todos" :key="todo.id">
-        <input :id="todo.id" type="checkbox" @change="markDone(todo.id)" />
-        <label :for="todo.id" :class="{ '-done': todo.isDone }">
-          {{ todo.name }}
-        </label>
-        <button class="delete-btn" @click="deleteTodo(todo.id)">х</button>
-      </li>
+    <todo-item
+        v-for="todo of props.todos"
+        :key="todo.id"
+        :todo="todo"
+        @on-delete="deleteTodo"
+        @on-mark="markDone"
+      />
     </ul>
-    <input
-        type="text"
-        placeholder="Запишите что-то..."
-        v-model="todoName"
+    <todo-form
+    @onAdd="onClickAdd"
     />
-    <button @click="onClickAdd">Добавить дело</button>
   </div>
 </template>
 
@@ -33,13 +30,13 @@
   padding: 0;
 }
 
-.todos > li {
+.todos > {
   list-style: none;
   display: flex;
   align-items: center;
 }
 
-.delete-btn {
+/* .delete-btn {
   margin-left: 16px;
   background-color: red;
   color: white;
@@ -50,25 +47,32 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-}
+  cursor: pointer; */
+/* } */
 </style>
 
 <script setup>
 
-import {ref, defineProps, defineEmits} from "vue";
+import TodoForm from "@/components/todo-form.vue";
+import TodoItem from "@/components/todo-item.vue";
+import {defineProps, defineEmits} from "vue";
+
 
 const props = defineProps({
-  todos: Array
+  todos: Array,
 })
+
+
 
 const emit = defineEmits(['onMark', 'onDelete', 'onAdd'])
 
-let todoName = ref('');
 
-function onClickAdd () {
-  emit('onAdd', { id: Date.now(), name: todoName.value, isDone: false })
-  todoName.value = '';
+
+
+function onClickAdd (newTodo) {
+  // console.log(newTodo)
+  emit("onAdd", newTodo)
+
 }
 
 function deleteTodo (id) {
